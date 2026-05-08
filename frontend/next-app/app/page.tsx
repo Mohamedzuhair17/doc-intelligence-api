@@ -1,8 +1,58 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTheme } from './context/ThemeContext';
+
+const NAV_LINKS = [
+  { label: 'How It Works', href: '#how-it-works' },
+  { label: 'Use Cases', href: '#use-cases' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'FAQ', href: '#faq' },
+  { label: 'Analyzer', href: '#analyzer' },
+];
+
+const HOW_IT_WORKS_STEPS = [
+  { num: '01', title: 'Call Capture', desc: 'Incoming calls are captured via Twilio VoIP integration in real time.', icon: '📞' },
+  { num: '02', title: 'Transcription', desc: 'Speech-to-text powered by OpenAI Whisper with 99% accuracy.', icon: '📝' },
+  { num: '03', title: 'AI Analysis', desc: 'Our engine extracts intent, urgency, and business type instantly.', icon: '🤖' },
+  { num: '04', title: 'Actionable Insight', desc: 'Results appear in your dashboard with recommended next actions.', icon: '📊' },
+];
+
+const USE_CASES = [
+  {
+    title: 'Auto Repair Shop',
+    icon: '🚗',
+    desc: 'Capture service requests automatically. Schedule appointments and follow-ups without missing a single call from worried car owners.',
+    color: 'from-blue-500 to-cyan-500',
+  },
+  {
+    title: 'Restaurant',
+    icon: '🍽️',
+    desc: 'Handle reservation calls, takeout orders, and catering inquiries seamlessly — even during the dinner rush.',
+    color: 'from-orange-500 to-red-500',
+  },
+  {
+    title: 'Medical / Dental Clinic',
+    icon: '🩺',
+    desc: 'Triage patient calls by urgency, schedule appointments, and ensure no critical health inquiry goes unanswered.',
+    color: 'from-green-500 to-emerald-500',
+  },
+];
+
+const PRICING_PLANS = [
+  { tier: 'Starter', price: '$29', period: '/mo', features: ['100 calls/month', 'Basic analytics dashboard', 'Email support', 'Single location'], popular: false },
+  { tier: 'Growth', price: '$79', period: '/mo', features: ['500 calls/month', 'Advanced AI insights', 'Priority support', 'Up to 5 locations', 'CRM integration'], popular: true },
+  { tier: 'Enterprise', price: 'Custom', period: '', features: ['Unlimited calls', 'Custom AI models', 'Dedicated account manager', 'Unlimited locations', 'API access', 'SLA guarantee'], popular: false },
+];
+
+const FAQ_ITEMS = [
+  { q: 'Is there a free trial?', a: 'Yes! We offer a 14-day free trial with full access to all features. No credit card required.' },
+  { q: 'Do you store call recordings?', a: 'Recordings are AES-256 encrypted at rest and automatically deleted after 30 days unless you enable persistent storage in your settings.' },
+  { q: 'Can I integrate with my existing CRM?', a: 'Absolutely. We provide webhooks and native integrations for HubSpot, Salesforce, Zoho, and more. Custom integrations available on Enterprise plans.' },
+  { q: 'What languages are supported?', a: 'Our AI currently supports English, Spanish, French, German, and Mandarin, with more languages being added quarterly.' },
+  { q: 'What support is available?', a: '24/7 email support for all plans. Growth and Enterprise plans include priority phone support and a dedicated account manager.' },
+];
 
 export default function Home() {
   const [message, setMessage] = useState('');
@@ -10,10 +60,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const { darkMode, toggleDarkMode } = useTheme();
   const [mobileNav, setMobileNav] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
-  useEffect(() => { setMounted(true); }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,14 +83,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  const navLinks = [
-    { label: 'How It Works', href: '#how-it-works' },
-    { label: 'Use Cases', href: '#use-cases' },
-    { label: 'Pricing', href: '#pricing' },
-    { label: 'FAQ', href: '#faq' },
-    { label: 'Analyzer', href: '#analyzer' },
-  ];
-
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
@@ -56,7 +95,7 @@ export default function Home() {
 
             {/* Desktop nav */}
             <ul className="hidden md:flex items-center gap-8 text-sm font-medium">
-              {navLinks.map((l) => (
+              {NAV_LINKS.map((l) => (
                 <li key={l.href}>
                   <a href={l.href} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                     {l.label}
@@ -95,7 +134,7 @@ export default function Home() {
           {/* Mobile nav dropdown */}
           {mobileNav && (
             <ul className="md:hidden bg-white dark:bg-gray-950 border-b-2 border-gray-300 dark:border-gray-700 px-6 pb-4 space-y-3 text-sm font-medium animate-fadeIn">
-              {navLinks.map((l) => (
+              {NAV_LINKS.map((l) => (
                 <li key={l.href}>
                   <a href={l.href} onClick={() => setMobileNav(false)} className="block hover:text-indigo-600 dark:hover:text-indigo-400">
                     {l.label}
@@ -115,7 +154,7 @@ export default function Home() {
             <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-400 rounded-full blur-3xl opacity-20 animate-pulse" />
 
             <div className="container mx-auto px-6 text-center relative z-10">
-              <div className={`transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <div className="transition-all duration-700 opacity-100 translate-y-0">
                 <span className="inline-block px-4 py-1.5 mb-6 text-xs font-semibold tracking-wider uppercase bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded-full">
                   AI-Powered Voice Platform
                 </span>
@@ -138,7 +177,7 @@ export default function Home() {
                   </a>
                   <a
                     href="#how-it-works"
-                    className="px-8 py-4 border-2 border-gray-500 dark:border-gray-600 rounded-full font-semibold hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300"
+                    className="px-8 py-4 border-2 border-gray-500 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-white/70 dark:bg-gray-900/30 rounded-full font-semibold hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
                   >
                     Learn More
                   </a>
@@ -153,12 +192,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">How It Works</h2>
               <p className="text-gray-500 dark:text-gray-400 text-center mb-14 max-w-xl mx-auto">Four simple steps to transform your customer communications.</p>
               <div className="grid md:grid-cols-4 gap-8">
-                {[
-                  { num: '01', title: 'Call Capture', desc: 'Incoming calls are captured via Twilio VoIP integration in real time.', icon: '📞' },
-                  { num: '02', title: 'Transcription', desc: 'Speech-to-text powered by OpenAI Whisper with 99% accuracy.', icon: '📝' },
-                  { num: '03', title: 'AI Analysis', desc: 'Our engine extracts intent, urgency, and business type instantly.', icon: '🤖' },
-                  { num: '04', title: 'Actionable Insight', desc: 'Results appear in your dashboard with recommended next actions.', icon: '📊' },
-                ].map((step) => (
+                {HOW_IT_WORKS_STEPS.map((step) => (
                   <div key={step.num} className="group relative bg-white dark:bg-gray-800 p-8 rounded-2xl border-2 border-gray-400 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-indigo-600 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div className="text-4xl mb-4">{step.icon}</div>
                     <span className="text-xs font-bold text-indigo-500 tracking-wider">STEP {step.num}</span>
@@ -176,26 +210,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Use Cases</h2>
               <p className="text-gray-500 dark:text-gray-400 text-center mb-14 max-w-xl mx-auto">Tailored solutions for businesses that depend on customer calls.</p>
               <div className="grid md:grid-cols-3 gap-8">
-                {[
-                  {
-                    title: 'Auto Repair Shop',
-                    icon: '🚗',
-                    desc: 'Capture service requests automatically. Schedule appointments and follow-ups without missing a single call from worried car owners.',
-                    color: 'from-blue-500 to-cyan-500',
-                  },
-                  {
-                    title: 'Restaurant',
-                    icon: '🍽️',
-                    desc: 'Handle reservation calls, takeout orders, and catering inquiries seamlessly — even during the dinner rush.',
-                    color: 'from-orange-500 to-red-500',
-                  },
-                  {
-                    title: 'Medical / Dental Clinic',
-                    icon: '🩺',
-                    desc: 'Triage patient calls by urgency, schedule appointments, and ensure no critical health inquiry goes unanswered.',
-                    color: 'from-green-500 to-emerald-500',
-                  },
-                ].map((caseItem) => (
+                {USE_CASES.map((caseItem) => (
                   <div key={caseItem.title} className="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-400 dark:border-gray-600 hover:shadow-2xl transition-all duration-300">
                     <div className={`h-2 bg-gradient-to-r ${caseItem.color}`} />
                     <div className="p-8">
@@ -215,11 +230,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Simple, Transparent Pricing</h2>
               <p className="text-gray-500 dark:text-gray-400 text-center mb-14 max-w-xl mx-auto">Start free. Scale as you grow. No hidden fees.</p>
               <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                {[
-                  { tier: 'Starter', price: '$29', period: '/mo', features: ['100 calls/month', 'Basic analytics dashboard', 'Email support', 'Single location'], popular: false },
-                  { tier: 'Growth', price: '$79', period: '/mo', features: ['500 calls/month', 'Advanced AI insights', 'Priority support', 'Up to 5 locations', 'CRM integration'], popular: true },
-                  { tier: 'Enterprise', price: 'Custom', period: '', features: ['Unlimited calls', 'Custom AI models', 'Dedicated account manager', 'Unlimited locations', 'API access', 'SLA guarantee'], popular: false },
-                ].map((plan) => (
+                {PRICING_PLANS.map((plan) => (
                   <div key={plan.tier} className={`relative bg-white dark:bg-gray-800 p-8 rounded-2xl border transition-all duration-300 hover:shadow-xl ${plan.popular ? 'border-indigo-500 shadow-lg shadow-indigo-500/10 scale-105' : 'border-gray-300 dark:border-gray-600'}`}>
                     {plan.popular && (
                       <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 text-xs font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full">
@@ -259,13 +270,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Frequently Asked Questions</h2>
               <p className="text-gray-500 dark:text-gray-400 text-center mb-14">Everything you need to know about VoiceAI.</p>
               <dl className="space-y-6">
-                {[
-                  { q: 'Is there a free trial?', a: 'Yes! We offer a 14-day free trial with full access to all features. No credit card required.' },
-                  { q: 'Do you store call recordings?', a: 'Recordings are AES-256 encrypted at rest and automatically deleted after 30 days unless you enable persistent storage in your settings.' },
-                  { q: 'Can I integrate with my existing CRM?', a: 'Absolutely. We provide webhooks and native integrations for HubSpot, Salesforce, Zoho, and more. Custom integrations available on Enterprise plans.' },
-                  { q: 'What languages are supported?', a: 'Our AI currently supports English, Spanish, French, German, and Mandarin, with more languages being added quarterly.' },
-                  { q: 'What support is available?', a: '24/7 email support for all plans. Growth and Enterprise plans include priority phone support and a dedicated account manager.' },
-                ].map((faq, i) => (
+                {FAQ_ITEMS.map((faq, i) => (
                   <div key={i} className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border-2 border-gray-400 dark:border-gray-600">
                     <dt className="font-semibold text-lg mb-2">{faq.q}</dt>
                     <dd className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{faq.a}</dd>
