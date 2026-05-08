@@ -1,8 +1,11 @@
 // server.js - Express backend for message analysis
 const express = require('express');
 const cors = require('cors');
+const Groq = require('groq-sdk');
 const app = express();
 const PORT = process.env.PORT || 10000;
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 app.use(cors({
   origin: '*',
@@ -16,6 +19,7 @@ app.get('/', (req, res) => {
   res.json({ 
     status: 'ok', 
     message: 'Doc Intelligence API is running',
+    ai_engine: GROQ_API_KEY ? `groq (${GROQ_MODEL})` : 'not configured (missing GROQ_API_KEY)',
     endpoints: {
       health: 'GET /health',
       analyze: 'POST /analyze or POST /api/analyze'
@@ -28,42 +32,80 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Simple rule-based analyzer
-function analyzeMessage(message) {
-  const lower = message.toLowerCase();
+const groq = GROQ_API_KEY ? new Groq({ apiKey: GROQ_API_KEY }) : null;
 
-  // Intent detection
-  let intent = /help|issue|problem|support|repair|appointment/.test(lower)
-    ? 'service_request'
-    : 'inquiry';
+function normalizeAnalyzeResponse(raw) {
+  const allowedIntents = new Set(['service_request', 'inquiry']);
+  const allowedBusinessTypes = new Set(['auto_repair', 'restaurant', 'medical', 'general']);
+  const allowedUrgency = new Set(['high', 'medium', 'low']);
 
-  // Business type detection
-  let business_type = 'general';
-  if (/car|vehicle|engine|repair|tire|brake/.test(lower)) business_type = 'auto_repair';
-  else if (/food|order|menu|restaurant|table|eat/.test(lower)) business_type = 'restaurant';
-  else if (/dentist|doctor|clinic|medical|dental|health|sick/.test(lower)) business_type = 'medical';
-
-  // Urgency detection
-  let urgency = /now|immediately|urgent|today|asap|fast|quick/.test(lower) ? 'high' : 'medium';
-
-  // Summary
-  let summary = '';
-  if (intent === 'service_request') {
-    summary = `Customer needs ${urgency === 'high' ? 'urgent ' : ''}assistance for ${business_type.replace('_', ' ')} issue.`;
-  } else {
-    summary = `Customer is inquiring about ${business_type.replace('_', ' ')} services.`;
-  }
+  const intent = allowedIntents.has(raw?.intent) ? raw.intent : 'inquiry';
+  const business_type = allowedBusinessTypes.has(raw?.business_type) ? raw.business_type : 'general';
+  const urgency = allowedUrgency.has(raw?.urgency) ? raw.urgency : 'medium';
+  const summary = typeof raw?.summary === 'string' && raw.summary.trim()
+    ? raw.summary.trim()
+    : `Customer is inquiring about ${business_type.replace('_', ' ')} services.`;
 
   return { intent, business_type, urgency, summary };
 }
 
-function handleAnalyze(req, res) {
+async function analyzeWithGroq(message) {
+  if (!groq) {
+    throw new Error('GROQ_API_KEY is not configured');
+  }
+
+  const completion = await groq.chat.completions.create({
+    model: GROQ_MODEL,
+    temperature: 0.2,
+    response_format: { type: 'json_object' },
+    messages: [
+      {
+        role: 'system',
+        content: 'You classify customer messages. Output must be strict JSON with keys: intent, business_type, urgency, summary.',
+      },
+      {
+        role: 'user',
+        content: `Analyze this customer message and return JSON only.
+
+Message:
+"${message}"
+
+Use schema:
+{
+  "intent": "service_request" | "inquiry",
+  "business_type": "auto_repair" | "restaurant" | "medical" | "general",
+  "urgency": "high" | "medium" | "low",
+  "summary": "short single sentence"
+}`,
+      },
+    ],
+  });
+
+  const text = completion.choices?.[0]?.message?.content?.trim();
+  if (!text) {
+    throw new Error('Groq returned empty response');
+  }
+  const cleaned = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```$/, '').trim();
+  const parsed = JSON.parse(cleaned);
+  return normalizeAnalyzeResponse(parsed);
+}
+
+async function handleAnalyze(req, res) {
   const { message } = req.body;
   if (!message || typeof message !== 'string' || !message.trim()) {
     return res.status(400).json({ error: 'Message is required and must be a non-empty string' });
   }
-  const result = analyzeMessage(message.trim());
-  return res.json(result);
+
+  try {
+    const result = await analyzeWithGroq(message.trim());
+    return res.json(result);
+  } catch (error) {
+    console.error('Groq analyze failed:', error.message);
+    return res.status(500).json({
+      error: 'AI analysis failed',
+      details: error.message,
+    });
+  }
 }
 
 app.post('/api/analyze', handleAnalyze);
