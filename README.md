@@ -1,5 +1,9 @@
 # Voice AI Startup Assignment
 
+## 📸 Demo Screenshots
+![Landing Page](./screenshots/landing-page.png)
+![AI Analyzer Result](./screenshots/analyzer-result.png)
+
 This repository contains a full-stack Voice AI landing page and a mini AI customer message analyzer.
 
 ## Project Structure
