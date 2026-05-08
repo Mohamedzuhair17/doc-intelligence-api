@@ -11,6 +11,7 @@ export default function Home() {
   const { darkMode, toggleDarkMode } = useTheme();
   const [mobileNav, setMobileNav] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -20,7 +21,7 @@ export default function Home() {
     setLoading(true);
     setResult(null);
     try {
-      const res = await fetch('http://localhost:5000/api/analyze', {
+      const res = await fetch(`${apiBaseUrl}/api/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message }),
