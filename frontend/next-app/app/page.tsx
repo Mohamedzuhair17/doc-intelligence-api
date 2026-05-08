@@ -47,7 +47,7 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
         {/* ─── Navbar ─── */}
-        <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800">
+        <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-lg border-b-2 border-gray-300 dark:border-gray-700">
           <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
             <Link href="/" className="text-2xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               VoiceAI
@@ -93,7 +93,7 @@ export default function Home() {
 
           {/* Mobile nav dropdown */}
           {mobileNav && (
-            <ul className="md:hidden bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 px-6 pb-4 space-y-3 text-sm font-medium animate-fadeIn">
+            <ul className="md:hidden bg-white dark:bg-gray-950 border-b-2 border-gray-300 dark:border-gray-700 px-6 pb-4 space-y-3 text-sm font-medium animate-fadeIn">
               {navLinks.map((l) => (
                 <li key={l.href}>
                   <a href={l.href} onClick={() => setMobileNav(false)} className="block hover:text-indigo-600 dark:hover:text-indigo-400">
@@ -137,7 +137,7 @@ export default function Home() {
                   </a>
                   <a
                     href="#how-it-works"
-                    className="px-8 py-4 border-2 border-gray-300 dark:border-gray-700 rounded-full font-semibold hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300"
+                    className="px-8 py-4 border-2 border-gray-500 dark:border-gray-600 rounded-full font-semibold hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300"
                   >
                     Learn More
                   </a>
@@ -158,7 +158,7 @@ export default function Home() {
                   { num: '03', title: 'AI Analysis', desc: 'Our engine extracts intent, urgency, and business type instantly.', icon: '🤖' },
                   { num: '04', title: 'Actionable Insight', desc: 'Results appear in your dashboard with recommended next actions.', icon: '📊' },
                 ].map((step) => (
-                  <div key={step.num} className="group relative bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <div key={step.num} className="group relative bg-white dark:bg-gray-800 p-8 rounded-2xl border-2 border-gray-400 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-indigo-600 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div className="text-4xl mb-4">{step.icon}</div>
                     <span className="text-xs font-bold text-indigo-500 tracking-wider">STEP {step.num}</span>
                     <h3 className="text-xl font-bold mt-2 mb-3">{step.title}</h3>
@@ -195,7 +195,7 @@ export default function Home() {
                     color: 'from-green-500 to-emerald-500',
                   },
                 ].map((caseItem) => (
-                  <div key={caseItem.title} className="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-300">
+                  <div key={caseItem.title} className="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-400 dark:border-gray-600 hover:shadow-2xl transition-all duration-300">
                     <div className={`h-2 bg-gradient-to-r ${caseItem.color}`} />
                     <div className="p-8">
                       <div className="text-5xl mb-4">{caseItem.icon}</div>
@@ -219,7 +219,7 @@ export default function Home() {
                   { tier: 'Growth', price: '$79', period: '/mo', features: ['500 calls/month', 'Advanced AI insights', 'Priority support', 'Up to 5 locations', 'CRM integration'], popular: true },
                   { tier: 'Enterprise', price: 'Custom', period: '', features: ['Unlimited calls', 'Custom AI models', 'Dedicated account manager', 'Unlimited locations', 'API access', 'SLA guarantee'], popular: false },
                 ].map((plan) => (
-                  <div key={plan.tier} className={`relative bg-white dark:bg-gray-800 p-8 rounded-2xl border transition-all duration-300 hover:shadow-xl ${plan.popular ? 'border-indigo-500 shadow-lg shadow-indigo-500/10 scale-105' : 'border-gray-100 dark:border-gray-700'}`}>
+                  <div key={plan.tier} className={`relative bg-white dark:bg-gray-800 p-8 rounded-2xl border transition-all duration-300 hover:shadow-xl ${plan.popular ? 'border-indigo-500 shadow-lg shadow-indigo-500/10 scale-105' : 'border-gray-300 dark:border-gray-600'}`}>
                     {plan.popular && (
                       <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 text-xs font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full">
                         MOST POPULAR
@@ -265,7 +265,7 @@ export default function Home() {
                   { q: 'What languages are supported?', a: 'Our AI currently supports English, Spanish, French, German, and Mandarin, with more languages being added quarterly.' },
                   { q: 'What support is available?', a: '24/7 email support for all plans. Growth and Enterprise plans include priority phone support and a dedicated account manager.' },
                 ].map((faq, i) => (
-                  <div key={i} className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border border-gray-100 dark:border-gray-700">
+                  <div key={i} className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border-2 border-gray-400 dark:border-gray-600">
                     <dt className="font-semibold text-lg mb-2">{faq.q}</dt>
                     <dd className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{faq.a}</dd>
                   </div>
@@ -286,7 +286,7 @@ export default function Home() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder='e.g. "My car won&#39;t start and I need help today."'
-                  className="w-full h-36 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none transition-all text-sm"
+                  className="w-full h-36 p-4 bg-white dark:bg-gray-800 border-2 border-gray-400 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none transition-all text-sm"
                   required
                 />
                 <button
