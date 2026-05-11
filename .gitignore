@@ -21,3 +21,7 @@ Thumbs.db
 document-ai-api/venv/
 document-ai-api/.env
 document-ai-api/__pycache__/
+.env.local
+.env
+node_modules
+.next

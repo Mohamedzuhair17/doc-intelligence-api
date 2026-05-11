@@ -3,6 +3,7 @@ import Script from 'next/script';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://voiceai.dev'),
   title: 'VoiceAI — Never Miss a Customer Call Again',
   description:
     'AI-powered Voice Assistant platform that records, transcribes, and analyzes customer calls for Auto Repair Shops, Restaurants, and Medical Clinics.',

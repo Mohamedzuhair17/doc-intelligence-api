@@ -68,11 +68,15 @@ export default function Home() {
   }, []);
 
   const fetchAnalysis = async (message: string) => {
-    const response = await fetch('/api/analyze', {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:10000';
+    const response = await fetch(`${API_URL}/api/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message }),
     });
+    if (!response.ok) {
+      throw new Error('API request failed');
+    }
     return response.json();
   };
 
@@ -324,7 +328,7 @@ export default function Home() {
             {/* Result card */}
             {result && (
               <div id="analyzer-result" className="mt-8 animate-fadeIn">
-                <h3 className="text-lg font-bold mb-4">Example Output:</h3>
+                <h3 className="text-lg font-bold mb-4">Analysis Result:</h3>
                 <div className="bg-[#0d1117] text-gray-300 p-6 rounded-xl border border-gray-800 shadow-2xl font-mono text-sm overflow-x-auto">
                   {'error' in result ? (
                     <div className="text-red-400">{JSON.stringify(result, null, 2)}</div>
