@@ -305,6 +305,7 @@ export default function Home() {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder='e.g. "My car won&#39;t start and I need help today."'
                 className="w-full h-36 p-4 bg-white dark:bg-gray-800 border-2 border-gray-400 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none transition-all text-sm"
+                maxLength={500}
                 required
               />
               <button
@@ -331,7 +332,12 @@ export default function Home() {
                 <h3 className="text-lg font-bold mb-4">Analysis Result:</h3>
                 <div className="bg-[#0d1117] text-gray-300 p-6 rounded-xl border border-gray-800 shadow-2xl font-mono text-sm overflow-x-auto">
                   {'error' in result ? (
-                    <div className="text-red-400">{JSON.stringify(result, null, 2)}</div>
+                    <div className="text-red-400 flex items-center gap-2">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>{result.error}</span>
+                    </div>
                   ) : (
                     <pre className="whitespace-pre-wrap">
 {`{
