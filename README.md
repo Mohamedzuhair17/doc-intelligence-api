@@ -63,7 +63,7 @@ cd backend
 npm install
 node server.js
 ```
-Backend runs at `http://localhost:5000`.
+Backend runs at `http://localhost:1000`.
 
 ### 2. Run Frontend
 ```bash
