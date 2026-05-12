@@ -48,7 +48,7 @@ const PRICING_PLANS = [
 
 const FAQ_ITEMS = [
   { q: 'Is there a free trial?', a: 'Yes! We offer a 14-day free trial with full access to all features. No credit card required.' },
-  { q: 'Do you store call recordings?', a: 'Recordings are AES-256 encrypted at rest and automatically deleted after 30 days unless you enable persistent storage in your settings.' },
+  { q: 'Do you store call recordings?', a: 'Call recordings are stored securely and automatically deleted after 30 days unless you choose to keep them longer.' },
   { q: 'Can I integrate with my existing CRM?', a: 'Absolutely. We provide webhooks and native integrations for HubSpot, Salesforce, Zoho, and more. Custom integrations available on Enterprise plans.' },
   { q: 'What languages are supported?', a: 'Our AI currently supports English, Spanish, French, German, and Mandarin, with more languages being added quarterly.' },
   { q: 'What support is available?', a: '24/7 email support for all plans. Growth and Enterprise plans include priority phone support and a dedicated account manager.' },
